@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Twitter Fox</title>
+    <link rel="stylesheet" type="text/css" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+   <script type=text/javascript>
+    var flag = 0;
+    var last = "";
+    function func()
+    {
+      flag = 1;
+      console.log("Getting tweets");
+    $(setInterval(function() {
+ $.getJSON('/tweet', {
+          a: $('input[name="a"]').val()
+        }, function(data) {
+            if(last!=data.result)
+            {
+              var string = data.result + 
+                "<br>Sentiment : " + data.sent + 
+                "<br>Emotions : " +
+                "<br>Sadness : " + data.sad +
+                "<br>Joy : " + data.joy +
+                "<br>fear : " + data.fear +
+                "<br>Disgust : " + data.disgust +
+                "<br>Anger : " + data.anger +
+                "<br>Key Entity : " + data.entity + "<hr>";
+              if(data.type=='"'+"Opinion"+'"')
+                document.getElementById('o').innerHTML += string;
+              else
+                document.getElementById('n').innerHTML += string;
+            }
+            // console.log(last);
+            last = data.result;
+        });
+        return false;
+      }),1000);
+  }
+  </script>
+
+</head>
+<body>
+    <div class="w3-container w3-teal">
+      <center><h2>Twitter Fox</h2></center>
+    </div>
+    <div class="w3-row-padding" style="margin-top: 10%;">
+        <div class="w3-quarter">&nbsp;</div>
+        <div class="w3-half">
+            <form class="w3-container">
+            <table>
+            <tr>
+            <td style="width:100%;">    
+                <input class="w3-input" type="text" placeholder="Enter search text" name = "a">
+            </td>
+            <td>    
+                <input type="button" onclick="func();" id="calculate" name="submit" value="Search" class="w3-btn w3-black">
+            </td>
+            </tr>
+            </table>
+            </form>
+        </div>
+        <div class="w3-quarter">&nbsp;</div>
+    </div>
+    <div class="w3-row-padding w3-container" style="margin-top: 3%;">
+        <div class="w3-half">
+            <header class="w3-container w3-teal">
+              <h1>News</h1>
+            </header>
+            <div class="w3-container" id="n"></div>
+        </div>
+        <div class="w3-half">
+            <header class="w3-container w3-teal">
+              <h1>Opinions</h1>
+            </header>
+            <div class="w3-container" id="o"></div>
+        </div>
+    </div>
+</body>
+</html>
